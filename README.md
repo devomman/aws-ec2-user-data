@@ -1,5 +1,6 @@
 When to use?
- If firewall is blocked (ufw), ssh connection port is not reachable.
+ 1. If firewall is blocked (ufw), ssh connection port is not reachable.
+ 2. If Accidentally enabled UFW on your Ubuntu instance and cant Revert.
  
  **Step 1**:
   Open view/change user data in instance settings.
