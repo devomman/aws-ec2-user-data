@@ -23,3 +23,37 @@ bootcmd:
 **Step 3**: 
  Restart the instance:(machine ip will be changed)
   Script will executed on boot, ufw will be disabled.
+
+
+**Another Method**
+- Source ex [aws](https://repost.aws/knowledge-center/ec2-linux-resolve-ssh-connection-errors)
+  
+```
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+ 
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+ 
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+ 
+--//
+Content-Type:
+    text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+ 
+#!/bin/bash
+iptables -P INPUT ACCEPT
+iptables -F
+systemctl restart sshd.service || service sshd restart
+if [[ $( cat /etc/hosts.[ad]* | grep -vE '^#' | awk 'NF' | wc -l) -ne 0 ]];\
+then sudo sed -i '1i sshd2 sshd : ALL: allow' /etc/hosts.allow; fi
+--//
+```
